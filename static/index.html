@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta data-n-head="true" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>Document</title>
+    <style>
+        *{ margin: 0; }
+        img{
+            width: 0;
+            height: 0;
+            display: block;
+        }
+        p{
+            font-size: 15px;
+            clear: both;
+            margin-top: 15px;
+        }
+        .start{
+            padding: 15px 25px;
+            background-color: teal;
+            border-radius: 5px;
+            float: left;
+            color: wheat;
+        }
+        .touch{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background-color: tan;
+        }
+        .bg_warp{
+            width: 100%;
+            overflow-x: hidden;
+            padding-top: 50px;
+            background-color: #7d94fe;
+        }
+        .bg_active{
+            transform: translate3d(-100%,0,0);
+        }
+        .bg_content{
+            transition: transform linear 15000s;
+            width: 1000000%;
+        }
+        .bg_content>div{
+            width: 100%;
+            height: 78px;
+            background: -webkit-linear-gradient(left,rgba(0,0,0,0.3), rgba(0,0,0,0.8)); /* Safari 5.1 - 6.0 */
+            background: -o-linear-gradient(left,rgba(0,0,0,0.3), rgba(0,0,0,0.8)); /* Opera 11.1 - 12.0 */
+            background: -moz-linear-gradient(left,rgba(0,0,0,0.3), rgba(0,0,0,0.8)); /* Firefox 3.6 - 15 */
+            background: linear-gradient(left,rgba(0,0,0,0.3), rgba(0,0,0,0.8)); /* 标准的语法 */
+            background-image: url('./img/bg0.png');
+            background-repeat: repeat-x;
+            margin-top: 50px;
+        }
+        .bg_content>div:nth-child(2){
+            background-position: -50% 0;
+        }
+
+        .user1{
+            width: 50px;
+            height: 70px;
+            position: fixed;
+            top: 104px;
+            left: 25px;
+            background-image: url('./img/lunyi_0.png');
+            background-position: 0 0;
+            background-repeat: no-repeat;
+            background-size: 40px;
+            transition: left linear 0.5s;
+        }
+        .user2{
+            width: 50px;
+            height: 70px;
+            position: fixed;
+            top: 232px;
+            left: 25px;
+            background-image: url('./img/lunyi_0.png');
+            background-position: 0 0;
+            background-repeat: no-repeat;
+            background-size: 40px;
+            transition: left linear 0.3s;
+        }
+        .user_run{
+            background-image: url('./img/lunyi_1.png');
+        }
+
+        .speedUp{
+            left: 120px;
+        }
+    </style>
+</head>
+<body>
+    <img src="./img/lunyi_0.png" alt="">
+    <img src="./img/lunyi_1.png" alt="">
+    <div class="bg_warp">
+        <div class="bg_content">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="user1"></div>
+    <div class="user2"></div>
+
+    <select class="level">
+        <option value="1">幼稚难度 1/s</option>
+        <option value="5">弱智难度 5/s</option>
+        <option value="10">中等难度 10/s</option>
+        <option value="20">疯狂难度 20/s</option>
+    </select>
+
+    <div class="start">开始</div>
+
+    <p>点击总数</p>
+    <p class="total">0</p>
+
+    <p>已过时间</p>
+    <p class="timed">0</p>
+
+    <p>需要超过computer 的点击次数阈值</p>
+    <p class="stage">0</p>
+
+    
+    <div class="touch"></div>
+
+    
+</body>
+<script>
+
+    let bg = document.querySelector('.bg_content');
+
+    let user1 = document.querySelector('.user1');
+
+    let user2 = document.querySelector('.user2');
+
+    let start = document.querySelector('.start');
+
+    let touch = document.querySelector('.touch');
+
+    let total = document.querySelector('.total');
+
+    let timed = document.querySelector('.timed');
+
+    let stage = document.querySelector('.stage');
+
+    let touchIndex = 0, time = 0, level = 5;
+
+    // let wid = document.body.clientWidth/80;
+
+    // let i = 0;
+
+    // let timeID = setInterval(()=>{
+
+    //     domDiv.style.transform = `translate3d(${wid * i}px, 0, 0)`;
+
+    // }, 400)
+
+    start.addEventListener('click',function(){
+
+        level = document.querySelector('.level').value;
+
+        stage.innerText = level;
+
+        bg.classList.add('bg_active');
+
+        user1.classList.toggle('user_run');
+
+        //  人物跑动动画
+        setInterval(()=>{
+
+            user1.classList.toggle('user_run');
+
+            user2.classList.toggle('user_run');
+
+        }, 120)
+
+        //  1S 间隔判断是否加速
+        setInterval(()=>{
+
+            time++;
+
+            if(touchIndex >= level * time){
+
+                user1.classList.add('speedUp');
+
+                user2.classList.remove('speedUp');
+            }else{
+
+                user2.classList.add('speedUp');
+
+                user1.classList.remove('speedUp');
+            }
+
+            timed.innerText = time;
+
+            stage.innerText = level * time;
+
+        },1000)
+
+    }, false);
+
+    touch.addEventListener('click',function(){
+
+        touchIndex++;
+
+        total.innerText = touchIndex;
+    }, false);
+
+
+
+    // 打开一个WebSocket:
+    let ws = new WebSocket('ws://localhost:3001');
+    // 响应onmessage事件:
+    ws.onmessage = function(msg) { 
+        console.log(msg); 
+    
+    };
+    
+
+    ws.onopen = function(){
+
+        // 给服务器发送一个字符串:
+        ws.send('Hello!');
+    }
+    
+
+    ws.onerror = function(err){
+
+        console.log(err);
+    }
+
+
+
+
+
+    
+
+
+</script>
+</html>

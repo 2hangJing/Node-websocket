@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>匹配大厅</title>
+    <style>
+        *{margin: 0}
+        
+        p{
+            font-size: 15px;
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <p>在线玩家</p>
+    <div class="userList"></div>
+    
+</body>
+<script>
+
+    let userID;
+  
+    let ws = new WebSocket('ws://10.13.5.166:3001');
+
+    let userList = document.querySelector('.userList');
+    
+    ws.onopen = function(){
+
+        // 给服务器发送一个字符串:
+        ws.send('最新链接，更新那些页面');
+
+            // 响应onmessage事件:
+        ws.onmessage = function(msg) { 
+        
+            let data = JSON.parse(msg.data);
+
+            if(data.type == 1){
+
+                userList.innerHTML = "";
+
+                for(let i = 0; i< data.userList.length; i++){
+
+                    userList.innerHTML += `<p class='user'>${data.userList[i].userName}</p>` 
+                }
+            }else if(data.type == 0){
+
+                userID = data.userID;
+
+                let pList = document.querySelectorAll('.user');
+
+                for(let i =0;i< pList.length; i++){
+                    
+                    pList[i].innerText == '玩家' + userID ? pList[i].innerHTML = `<p class='my'>${'玩家' + userID}（this is you！）</p>` : null;
+                }
+            }
+
+            
+            
+        };
+    }
+    
+
+    ws.onerror = function(err){
+
+        console.log(err);
+    }
+</script>
+</html>
