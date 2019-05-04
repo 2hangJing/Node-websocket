@@ -4,69 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/match.css">
     <title>匹配大厅</title>
-    <style>
-        *{margin: 0}
-        
-        p{
-            font-size: 15px;
-            margin-top: 20px;
-            padding-left: 20px;
-        }
-    </style>
 </head>
 <body>
-    <p>在线玩家</p>
+
+    <div class="login">
+        <div class="login_warp">
+            <p class="login_name">输入昵称</p>
+            <input class="login_input" type="text">
+            <div class="login_btn">确定</div>
+        </div>
+
+        <img class="loading" src="./img/loading.gif" alt="">
+    </div>
+
+
+    
+    <h3 class="user_title">在线玩家</h3>
     <div class="userList"></div>
-    
 </body>
-<script>
-
-    let userID;
-  
-    let ws = new WebSocket('ws://10.13.5.166:3001');
-
-    let userList = document.querySelector('.userList');
-    
-    ws.onopen = function(){
-
-        // 给服务器发送一个字符串:
-        ws.send('最新链接，更新那些页面');
-
-            // 响应onmessage事件:
-        ws.onmessage = function(msg) { 
-        
-            let data = JSON.parse(msg.data);
-
-            if(data.type == 1){
-
-                userList.innerHTML = "";
-
-                for(let i = 0; i< data.userList.length; i++){
-
-                    userList.innerHTML += `<p class='user'>${data.userList[i].userName}</p>` 
-                }
-            }else if(data.type == 0){
-
-                userID = data.userID;
-
-                let pList = document.querySelectorAll('.user');
-
-                for(let i =0;i< pList.length; i++){
-                    
-                    pList[i].innerText == '玩家' + userID ? pList[i].innerHTML = `<p class='my'>${'玩家' + userID}（this is you！）</p>` : null;
-                }
-            }
-
-            
-            
-        };
-    }
-    
-
-    ws.onerror = function(err){
-
-        console.log(err);
-    }
-</script>
+<script src="./js/macth.js"></script>
 </html>
