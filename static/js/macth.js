@@ -24,8 +24,8 @@ function ws(userName){
 
     let userID;
 
-    // wsObj = new WebSocket('ws://192.168.1.2:3001');
-    wsObj = new WebSocket('ws://10.13.5.166:3001');
+    wsObj = new WebSocket('ws://192.168.1.2:3001');
+    // wsObj = new WebSocket('ws://10.13.5.166:3001');
     
     let userList = document.querySelector('.userList');
 
@@ -44,8 +44,6 @@ function ws(userName){
             if(data.type == 'service_1'){
 
                 Object.assign(userData,  data.data);
-
-                game = new Game(userData);
 
                 //  防止 service_2 先到达
                 $('.invite[data-id = "'+ userData.userID +'"]').css('dsplay','none');
@@ -118,10 +116,11 @@ function ws(userName){
 
                 $('.login').css('display','none');
 
-                $('.game_warp').css('display','block');
+                
 
                 //  game.js 开始游戏
                 // gameActive(wsObj,data.order);
+                game = new Game(userData);
 
                 game.init(wsObj,data.order);
                 
@@ -163,7 +162,7 @@ function ws(userName){
 
                 let endText = game.touchIndex<=clickNum &&'You Lost!' || 'You Win!';
                 
-                game.end(endText);
+                game.end(endText, userData);
             }
 
 

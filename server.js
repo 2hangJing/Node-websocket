@@ -30,7 +30,7 @@ wss.on('connection', function (ws) {
 
         //  服务端广播 更新用户列表
         wss.clients.forEach(function(client){
-            client.send(JSON.stringify({type: 0, data: userList}));
+            client.send(JSON.stringify({type: 'service_2', data: userList}));
         })
     });
 

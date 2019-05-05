@@ -26,6 +26,10 @@ function Game(userData){
     this.touchIndex = 0;
 
     this.init = function(wsObj, order){
+        
+        $('.game_warp').css('display','block');
+        
+        $('.game_start_second').css('display','block');
 
         setTimeout(()=>{
 
@@ -54,7 +58,7 @@ function Game(userData){
 
     this.start = function(wsObj, order){
 
-        let isUser1 = this.userData.userID == order.invite.userID, timeID;
+        let isUser1 = this.userData.userID == order.invite.userID, timeID, animateID;
 
         $(`.game_user${isUser1 ? '1' : '2'} >p`).text('this is you!');
 
@@ -63,7 +67,7 @@ function Game(userData){
         $('.game_user1').toggleClass('game_user_run');
 
         //  人物跑动动画
-        setInterval(()=>{
+        animateID = setInterval(()=>{
 
             $('.game_user1,.game_user2').toggleClass('game_user_run');
 
@@ -85,16 +89,31 @@ function Game(userData){
                 wsObj.send(JSON.stringify({type: 'user_6', order}));
 
                 clearInterval(timeID);
+
+                clearInterval(animateID);
             }
 
         },1000)
     }
 
-    this.end = function(str){
+    this.end = function(str,userData){
 
         $('.game_end>p').text(str);
 
         $('.game_end').css('display','block');
+
+        setTimeout(()=>{
+
+            Object.assign(userData, {isConfirm: false, num: 0});
+
+            $('.game_end,.game_warp').css('display','none');
+
+            $('.game_bg_content').removeClass('game_bg_active');
+
+            $('.game_start_second>p').text(5);
+
+            $('.game_user1,.game_user2').removeClass('speedUp').find('p').text('');
+        }, 5000);
     }
 }
 
