@@ -19,7 +19,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    width: 450px;
+    width: 80%;
+    max-width: 450px;
     height: 200px;
     margin: auto;
     border-radius: 8px;
@@ -66,12 +67,19 @@
     right: 0;
     bottom: 0;
 }
+.loading_text{
+    color: #2ebaae;
+    font-size: 20px;
+    margin-top: 25vh;
+    text-align: center;
+}
+
 
 .user_title{
     font-size: 25px;
     margin: 25px 0 25px 25px;
 }
-.userList>div{
+.userDetail{
     cursor: pointer;
     padding-bottom: 25px;
     border-bottom: 1px solid #bbb;
@@ -85,4 +93,20 @@
     margin-left: 25px;
     font-size: 14px;
     color: #666;
+    display: block;
+    margin-top: 10px;
+}
+.userDetail:after{
+    content: "";
+    display: block;
+    clear: both;
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+.invite{
+    border: 1px solid #2ebaae;
+    padding: 5px 15px;
+    border-radius: 5px;
+    float: left;
 }

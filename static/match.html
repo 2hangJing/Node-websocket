@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./css/match.css">
+    <link rel="stylesheet" href="./css/game.css">
     <title>匹配大厅</title>
+    <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -15,14 +17,49 @@
             <input class="login_input" type="text">
             <div class="login_btn">确定</div>
         </div>
-
+        <h2 class="loading_text"></h2>
         <img class="loading" src="./img/loading.gif" alt="">
     </div>
-
-
     
     <h3 class="user_title">在线玩家</h3>
     <div class="userList"></div>
+
+    <!-- game 弹窗 -->
+    <div class="game_warp">
+
+        <div class="game_start_second">
+            <p>5</p>
+        </div>
+
+        <div class="game_end">
+            <p>You Win!</p>
+        </div>
+
+        <img class="game_img_Preloading" src="./img/lunyi_0.png" alt="">
+        <img class="game_img_Preloading" src="./img/lunyi_1.png" alt="">
+
+        <div class="game_bg_warp">
+            <div class="game_bg_content">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="game_user1"><p></p></div>
+        <div class="game_user2"><p></p></div>
+
+        <p>已过时间</p>
+        <p class="timed">0</p>
+
+        <p>你已点击</p>
+        <p class="total">0</p>
+
+        <p>对方已点击</p>
+        <p class="stage">0</p>
+        
+        <div class="touch">点击此区域！</div>
+    </div>
 </body>
+<script src="./js/game.js"></script>
 <script src="./js/macth.js"></script>
 </html>

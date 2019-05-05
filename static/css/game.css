@@ -1,0 +1,137 @@
+
+p {
+    font-size: 15px;
+    clear: both;
+    margin-top: 15px;
+}
+
+.game_warp{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 100;
+}
+.game_img_Preloading{
+    display: none;
+}
+.game_bg_warp {
+    width: 100%;
+    overflow-x: hidden;
+    padding-top: 50px;
+    background-color: #7d94fe;
+}
+.game_bg_content {
+    transition: transform linear 15000s;
+    width: 1000000%;
+}
+.game_bg_content >div {
+    width: 100%;
+    height: 78px;
+    background-image: url('../img/bg0.png');
+    background-repeat: repeat-x;
+    margin-top: 50px;
+}
+
+.game_bg_content >div:nth-child(2) {
+    background-position: -50% 0;
+}
+.game_bg_active {
+    transform: translate3d(-100%, 0, 0);
+}
+
+.game_user1 {
+    width: 50px;
+    height: 70px;
+    position: fixed;
+    top: 104px;
+    left: 25px;
+    background-image: url('../img/lunyi_0.png');
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 40px;
+    transition: left linear 0.5s;
+}
+
+.game_user2 {
+    width: 50px;
+    height: 70px;
+    position: fixed;
+    top: 232px;
+    left: 25px;
+    background-image: url('../img/lunyi_0.png');
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 40px;
+    transition: left linear 0.3s;
+}
+.game_user1>p,.game_user2>p{
+    position: absolute;
+    top: -45px;
+    font-size: 18px;
+    color: white;
+}
+
+.game_user_run {
+    background-image: url('../img/lunyi_1.png');
+}
+
+.game_start_second{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.6);
+    z-index: 100;
+}
+
+.game_start_second>p{
+
+    margin-top: 40vh;
+    line-height: 20vh;
+    font-size: 15vh;
+    font-weight: 600;
+    color: #2ebaae;
+    text-align: center;
+}
+
+.game_end{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.6);
+    z-index: 100;
+}
+.game_end>p{
+    margin-top: 40vh;
+    line-height: 20vh;
+    font-size: 25px;
+    font-weight: 600;
+    color: #2ebaae;
+    text-align: center;
+}
+.touch {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background-color: tan;
+    color: white;
+    text-align: center;
+    padding-top: 40px;
+    font-size: 20px;
+}
+
+
+.speedUp {
+    left: 50%;
+}
+
+

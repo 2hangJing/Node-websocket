@@ -20,23 +20,9 @@ const wss = new WebSocketServer({
 
 let userList = [], userID = 1;
 
-
-//  type = 1 ==> 用户 ==> 服务端  告诉服务端新连接的名字
-//  type = 2 ==> 用户1 ==> 服务端  用户1邀请用户2，用户1发送到服务端邀请，服务端转发。
-//  type = 3 ==> 服务端 ==> 用户2   服务端转发用户1 邀请用户2
-
-
 wss.on('connection', function (ws) {
 
-    
-
-    // //  监听到链接后统一更新连接的用户列表
-    // ws.send(JSON.stringify(userList), (err) => {
-
-        
-    // });
-
-    ws.on('close', function close(){
+    ws.on('close', function(){
 
         let deleteIndex = userList.findIndex((val) => val.userID == ws.userData.userID);
 
@@ -52,8 +38,7 @@ wss.on('connection', function (ws) {
 
         let data = JSON.parse(message);
 
-        //  首次连接，接收用户端用户名等数据
-        if(data.type == 1){
+        if(data.type == 'user_1'){
 
             let date = new Date(),year = date.getFullYear(), month = date.getMonth()+1, day = date.getDate(), hour = date.getHours(), minute = date.getMinutes(), second = date.getSeconds();
 
@@ -65,53 +50,102 @@ wss.on('connection', function (ws) {
 
             userList.push(userData);
 
-            ws.userData = userData
+            ws.userData = userData;
 
             userID++;
 
+            //  单独给链接用户返回该用户在服务端数据
+            ws.send(JSON.stringify({type: 'service_1', data: userData}));
+
             //  服务端广播 更新用户列表
             wss.clients.forEach(function(client){
 
-                client.send(JSON.stringify({type: 0, data: userList}));
+                client.send(JSON.stringify({type: 'service_2', data: userList}));
             });
         }
 
-        //  发送邀请
-        if(data.type == 2){
+
+        if(data.type == 'user_2'){
 
             //  服务端广播 更新用户列表
             wss.clients.forEach(function(client){
 
-                if(data.data.userID == client.userData.userID){
+                if(data.order.beInvite.userID == client.userData.userID){
 
-                    client.send(JSON.stringify({type: 3, data: ws.userData}));
+                    client.send(JSON.stringify({type: 'service_3', order: data.order}));
+                }
+            });
+        }
+
+        if(data.type == 'user_3'){
+
+            //  服务端广播 更新用户列表
+            wss.clients.forEach(function(client){
+
+                if(data.order.invite.userID == client.userData.userID){
+
+                    client.send(JSON.stringify({type: 'service_4', order : data.order}));
+                }
+            });
+        }
+
+        if(data.type == 'user_4'){
+
+            let { invite, beInvite } = data.order;
+
+            if(invite.isConfirm){
+
+                //  统一发送开始游戏
+                wss.clients.forEach(function(client){
+
+                    if(invite.userID == client.userData.userID || beInvite.userID == client.userData.userID){
+
+                        client.send(JSON.stringify({type: 'service_5', order : data.order}));
+                    }
+                });
+            }else{
+
+                //  player1 玩家取消了游戏 , 更新player2 游戏状态
+                wss.clients.forEach(function(client){
+
+                    if(data.order.beInvite.userID == client.userData.userID){
+
+                        data.order.beInvite.isConfirm = false;
+
+                        client.send(JSON.stringify({type: 'service_6', order : data.order}));
+                    }
+                });
+            }
+        }
+
+        if(data.type == 'user_5'){
+
+            let { invite, beInvite } = data.order;
+
+            //  服务端广播 更新用户列表
+            wss.clients.forEach(function(client){
+
+                if(client.userData.userID == (!!invite.num ? beInvite.userID : invite.userID)){
+
+                    client.send(JSON.stringify({type: 'service_7', order : data.order}));
                 }
             });
         }
 
 
-        //  发送邀请
-        if(data.type == 4){
+        if(data.type == 'user_6'){
 
-            if(data.data.isConfirm){
+            let { invite, beInvite } = data.order;
 
+            //  服务端广播 更新用户列表
+            wss.clients.forEach(function(client){
 
-            }else{
+                if(client.userData.userID == (!!invite.num ? beInvite.userID : invite.userID)){
 
-                //  服务端广播 更新用户列表
-                wss.clients.forEach(function(client){
-
-                    if(data.data.userID == client.userData.userID){
-
-                        client.send(JSON.stringify({type: 5, data : {userData : data.data.userData, isConfirm : false}}));
-                    }
-                });
-                
-            }
-
-            
+                    client.send(JSON.stringify({type: 'service_8', order : data.order}));
+                }
+            });
         }
-
     })
 });
 
