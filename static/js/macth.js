@@ -119,7 +119,6 @@ function ws(userName){
                 
 
                 //  game.js 开始游戏
-                // gameActive(wsObj,data.order);
                 game = new Game(userData);
 
                 game.init(wsObj,data.order);
@@ -141,7 +140,7 @@ function ws(userName){
                 let isInvite = userData.userID == invite.userID;
 
                 // game.js stage 为对方点击次数
-                stage.innerText = clickNum;
+                $('.stage').text(clickNum);
                 
                 if((isInvite? game.touchIndex : clickNum) >= (isInvite? clickNum : game.touchIndex)){
                     
@@ -150,9 +149,9 @@ function ws(userName){
                     $('.game_user2').removeClass('speedUp');
                 }else{
 
-                    user2.classList.add('speedUp');
+                    $('.game_user2').addClass('speedUp');
 
-                    user1.classList.remove('speedUp');
+                    $('.game_user1').removeClass('speedUp');
                 }
             }else if(data.type == 'service_8'){
 
@@ -160,7 +159,7 @@ function ws(userName){
 
                 let clickNum = beInvite.num || invite.num;
 
-                let endText = game.touchIndex<=clickNum &&'You Lost!' || 'You Win!';
+                let endText = game.touchIndex<=clickNum &&'你点的样子很像CXK!' || '有，有点，有点快!';
                 
                 game.end(endText, userData);
             }
